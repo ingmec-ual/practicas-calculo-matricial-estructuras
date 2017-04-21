@@ -28,11 +28,14 @@ int main()
 	using namespace Eigen;
 
 	Eigen::Matrix<double,4,4> A = Eigen::Matrix4d::Random(4, 4);
-	Eigen::Matrix<double,5,3> B = indexing(A, std::array<int, 5>{ 0,1,2,3,0 }, std::array<int, 3>{ 2, 1, 0 });
+	Eigen::Matrix<double,6,6> K = Eigen::Matrix<double,6,6>::Zero();
 
-	std::cout << "A =" << std::endl;
+	K.block<3,3>(0,0) += indexing(A, std::array<int, 3>{ 0,1,3 }, std::array<int, 3>{ 0,1,3 });
+	// TODO: Make an expression valid for lvalue!
+	//indexing(K,std::array<int, 3>{ 0,1,3 }, std::array<int, 3>{ 0,1,3 }) = A.block<3,3>(0,0);
+
 	std::cout << A << std::endl << std::endl;
-	std::cout << B << std::endl;
+	std::cout << K << std::endl;
 
 	return 0; // el programa finaliza sin errores
 }
