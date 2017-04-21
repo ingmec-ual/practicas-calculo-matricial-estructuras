@@ -1,5 +1,5 @@
 /******************************************************************************
-Pr·cticas de c·lculo matricial de estructuras
+Pr√°cticas de c√°lculo matricial de estructuras
 https://github.com/ingmec-ual/practicas-calculo-matricial-estructuras
 
 Copyright 2017 - Jose Luis Blanco Claraco <jlblanco@ual.es>
