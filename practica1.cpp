@@ -19,7 +19,6 @@ Complete BSD-3-clause License: https://opensource.org/licenses/BSD-3-Clause
 ******************************************************************************/
 
 #include <Eigen/Dense>
-#include <array>
 #include "libcalculomatricial.h"
 #include <iostream>
 
@@ -28,14 +27,13 @@ int main()
 	using namespace Eigen;
 
 	Eigen::Matrix<double,4,4> A = Eigen::Matrix4d::Random(4, 4);
-	Eigen::Matrix<double,6,6> K = Eigen::Matrix<double,6,6>::Zero();
 
-	K.block<3,3>(0,0) += indexing(A, std::array<int, 3>{ 0,1,3 }, std::array<int, 3>{ 0,1,3 });
-	// TODO: Make an expression valid for lvalue!
-	//indexing(K,std::array<int, 3>{ 0,1,3 }, std::array<int, 3>{ 0,1,3 }) = A.block<3,3>(0,0);
+	std::cout << "A:\n" << A << std::endl;
+	indexing(A,std::array<int, 3>{ 0,2,1 },std::array<int, 3>{ 2,1,0 }) = Eigen::Matrix<double,3,3>::Identity();
+	std::cout << "A:\n" << A << std::endl;
 
-	std::cout << A << std::endl << std::endl;
-	std::cout << K << std::endl;
+	auto B = indexing(A,std::array<int, 3>{ 0,1,3 },std::array<int, 2>{ 0,3 } );
+	std::cout << "B:\n" << B << std::endl;
 
 	return 0; // el programa finaliza sin errores
 }

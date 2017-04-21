@@ -18,39 +18,99 @@ this software without specific prior written permission.
 Complete BSD-3-clause License: https://opensource.org/licenses/BSD-3-Clause
 ******************************************************************************/
 
-#include <Eigen/Dense>
+#include <Eigen/Core>
+#include <array>
 
-// From: https://eigen.tuxfamily.org/dox-devel/TopicCustomizing_NullaryExpr.html
-template<class ArgType, class RowIndexType, class ColIndexType>
-class indexing_functor {
-	const ArgType &m_arg;
-	const RowIndexType &m_rowIndices;
-	const ColIndexType &m_colIndices;
+template <class ArgType,class RowIndexType,class ColIndexType> class Indexing;
+
+namespace Eigen
+{
+namespace internal
+{
+template <class ArgType,class RowIndexType,class ColIndexType>
+struct traits<Indexing<ArgType,RowIndexType,ColIndexType> >
+{
+	typedef Eigen::Dense StorageKind;
+	typedef Eigen::MatrixXpr XprKind;
+	typedef typename ArgType::StorageIndex StorageIndex;
+	typedef typename ArgType::Scalar Scalar;
+	enum {
+		Flags = Eigen::ColMajor,
+		RowsAtCompileTime = std::tuple_size<RowIndexType>::value,
+		ColsAtCompileTime = std::tuple_size<ColIndexType>::value,
+		MaxRowsAtCompileTime = std::tuple_size<RowIndexType>::value,
+		MaxColsAtCompileTime = std::tuple_size<ColIndexType>::value
+	};
+};
+}
+}
+
+template <class ArgType,class RowIndexType,class ColIndexType>
+class Indexing : public Eigen::MatrixBase<Indexing<ArgType,RowIndexType,ColIndexType> >
+{
 public:
-	typedef Eigen::Matrix<typename ArgType::Scalar,
-		std::tuple_size<RowIndexType>::value, //RowIndexType::SizeAtCompileTime,
-		std::tuple_size<ColIndexType>::value,//ColIndexType::SizeAtCompileTime,
-		ArgType::Flags&Eigen::RowMajorBit ? Eigen::RowMajor : Eigen::ColMajor,
-		std::tuple_size<RowIndexType>::value,  //RowIndexType::MaxSizeAtCompileTime,
-		std::tuple_size<ColIndexType>::value //MaxSizeAtCompileTime
-	> MatrixType;
-	indexing_functor(const ArgType& arg, const RowIndexType& row_indices, const ColIndexType& col_indices)
-		: m_arg(arg), m_rowIndices(row_indices), m_colIndices(col_indices)
-	{}
-	const typename ArgType::Scalar& operator() (Eigen::Index row, Eigen::Index col) const {
-		return m_arg(m_rowIndices[row], m_colIndices[col]);
+	Indexing(const ArgType& arg,const RowIndexType &ri,const ColIndexType &ci)
+		: m_arg(arg),m_row_indices(ri),m_col_indices(ci)
+	{
+		//EIGEN_STATIC_ASSERT(ArgType::ColsAtCompileTime == 1,YOU_TRIED_CALLING_A_VECTOR_METHOD_ON_A_MATRIX);
+	}
+	typedef typename Eigen::internal::ref_selector<Indexing>::type Nested;
+	typedef Eigen::Index Index;
+	Index rows() const { return std::tuple_size<RowIndexType>::value; }
+	Index cols() const { return std::tuple_size<ColIndexType>::value; }
+	typedef typename Eigen::internal::ref_selector<ArgType>::type ArgTypeNested;
+	ArgTypeNested m_arg;
+	const RowIndexType & m_row_indices;
+	const ColIndexType & m_col_indices;
+
+	template <class Derived>
+	Indexing<ArgType,RowIndexType,ColIndexType> operator =(const Eigen::EigenBase<Derived>& o)
+	{
+		eigen_assert(this->rows()==o.rows());
+		eigen_assert(this->cols()==o.cols());
+		for (Index r=0;r<rows();r++) {
+			for (Index c=0;c<cols();c++) {
+				const_cast<ArgType&>(m_arg).coeffRef(m_row_indices[r],m_col_indices[c]) = o.derived().coeff(r,c);
+			}
+		}
+		return *this;
 	}
 };
 
-/** An indexing(A,rows,cols) function creating the nullary expression:
-  * See docs: https://eigen.tuxfamily.org/dox-devel/TopicCustomizing_NullaryExpr.html
-  */
-template <class ArgType, class RowIndexType, class ColIndexType>
-Eigen::CwiseNullaryOp<indexing_functor<ArgType, RowIndexType, ColIndexType>, typename indexing_functor<ArgType, RowIndexType, ColIndexType>::MatrixType>
-indexing(const Eigen::MatrixBase<ArgType>& arg, const RowIndexType& row_indices, const ColIndexType& col_indices)
+namespace Eigen
 {
-	typedef indexing_functor<ArgType, RowIndexType, ColIndexType> Func;
-	typedef typename Func::MatrixType MatrixType;
-	return MatrixType::NullaryExpr(row_indices.size(), col_indices.size(), Func(arg.derived(), row_indices, col_indices));
+namespace internal
+{
+template<typename ArgType,class RowIndexType,class ColIndexType>
+struct evaluator<Indexing<ArgType,RowIndexType,ColIndexType> >
+		: evaluator_base<Indexing<ArgType,RowIndexType,ColIndexType> >
+{
+	typedef Indexing<ArgType,RowIndexType,ColIndexType> XprType;
+	typedef typename nested_eval<ArgType, XprType::ColsAtCompileTime>::type ArgTypeNested;
+	typedef typename remove_all<ArgTypeNested>::type ArgTypeNestedCleaned;
+	typedef typename XprType::CoeffReturnType CoeffReturnType;
+	enum {
+		CoeffReadCost = evaluator<ArgTypeNestedCleaned>::CoeffReadCost,
+		Flags = Eigen::ColMajor
+	};
+
+	evaluator(const XprType& xpr)
+		: m_argImpl(xpr.m_arg), m_row_indices(xpr.m_row_indices),m_col_indices(xpr.m_col_indices)
+	{ }
+	CoeffReturnType coeff(Index row, Index col) const
+	{
+		return m_argImpl.coeff(m_row_indices[row],m_col_indices[col]);
+	}
+	evaluator<ArgTypeNestedCleaned> m_argImpl;
+	const RowIndexType & m_row_indices;
+	const ColIndexType & m_col_indices;
+};
+}
+}
+
+template <class ArgType,class RowIndexType, class ColIndexType>
+Indexing<ArgType,RowIndexType,ColIndexType> indexing(const Eigen::MatrixBase<ArgType>& arg, const RowIndexType& row_indices, const ColIndexType& col_indices)
+{
+	return Indexing<ArgType,RowIndexType,ColIndexType>(arg.derived(),row_indices,col_indices);
 }
 

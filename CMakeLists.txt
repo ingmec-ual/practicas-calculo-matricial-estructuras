@@ -11,6 +11,12 @@ project(practica-cm)
 # Usaremos como mínimo la versión C++11 del lenguaje C++
 set(CMAKE_CXX_STANDARD 11)
 
+# Usar un nivel avanzado de "warnings" para detectar posibles errores:
+IF(CMAKE_COMPILER_IS_GNUCXX)
+  SET(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wall")
+ENDIF()
+
+
 # ------------------------------------------------
 # Sección: Declaración de librerías a "importar"
 # ------------------------------------------------
