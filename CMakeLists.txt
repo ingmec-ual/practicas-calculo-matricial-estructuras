@@ -40,5 +40,7 @@ add_executable(
 	practica1
 	# Lista de ficheros de código fuente a compilar en este "target":
 	practica1.cpp
+	libcalculomatricial.h  libcalculomatricial.cpp
+	eigen_indexing.h
 )
 

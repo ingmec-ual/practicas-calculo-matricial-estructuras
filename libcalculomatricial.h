@@ -19,21 +19,13 @@ Complete BSD-3-clause License: https://opensource.org/licenses/BSD-3-Clause
 ******************************************************************************/
 
 #include <Eigen/Dense>
-#include "libcalculomatricial.h"
-#include <iostream>
+#include "eigen_indexing.h"
 
-int main()
+namespace calcmat
 {
-	using namespace Eigen;
 
-	Eigen::MatrixXi A = Eigen::MatrixXi::Random(4, 4);
-	Array3i ri(1, 2, 1);
-	ArrayXi ci(6); ci << 3, 2, 1, 0, 0, 2;
-	Eigen::MatrixXi B = indexing(A, ri, ci);
-	std::cout << "A =" << std::endl;
-	std::cout << A << std::endl << std::endl;
-	std::cout << "A([" << ri.transpose() << "], [" << ci.transpose() << "]) =" << std::endl;
-	std::cout << B << std::endl;
 
-	return 0; // el programa finaliza sin errores
-}
+
+
+
+} // end namespace "calcmat"
