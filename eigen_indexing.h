@@ -28,11 +28,12 @@ class indexing_functor {
 	const ColIndexType &m_colIndices;
 public:
 	typedef Eigen::Matrix<typename ArgType::Scalar,
-		RowIndexType::SizeAtCompileTime,
-		ColIndexType::SizeAtCompileTime,
+		std::tuple_size<RowIndexType>::value, //RowIndexType::SizeAtCompileTime,
+		std::tuple_size<ColIndexType>::value,//ColIndexType::SizeAtCompileTime,
 		ArgType::Flags&Eigen::RowMajorBit ? Eigen::RowMajor : Eigen::ColMajor,
-		RowIndexType::MaxSizeAtCompileTime,
-		ColIndexType::MaxSizeAtCompileTime> MatrixType;
+		std::tuple_size<RowIndexType>::value,  //RowIndexType::MaxSizeAtCompileTime,
+		std::tuple_size<ColIndexType>::value //MaxSizeAtCompileTime
+	> MatrixType;
 	indexing_functor(const ArgType& arg, const RowIndexType& row_indices, const ColIndexType& col_indices)
 		: m_arg(arg), m_rowIndices(row_indices), m_colIndices(col_indices)
 	{}
