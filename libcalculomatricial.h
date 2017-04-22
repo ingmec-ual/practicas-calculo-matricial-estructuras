@@ -23,7 +23,23 @@ Complete BSD-3-clause License: https://opensource.org/licenses/BSD-3-Clause
 
 namespace calcmat
 {
-
+	/** Genera la matriz de rigidez de una barra articulada-articulada con 4 GDL.
+	* \param[in] L Longitud de la barra [m]
+	* \param[in] E Modulo de Yound [Pa]
+	* \param[in] A Seccion de la barra [m^2]
+	*
+	* La salida se da en forma de las tres submatrices Kii, Kjj, Kij:
+	*      [  Kii  |  Kij  ]
+	*  K = [ ------+------ ]
+	*      [ Kij^T |  Kjj  ]
+	*/
+	void matriz_barra_art_art(
+		double L, double E, double A,
+		Eigen::Matrix2d & Kii,
+		Eigen::Matrix2d & Kjj,
+		Eigen::Matrix2d & Kij
+	);
+	
 
 
 

@@ -20,4 +20,21 @@ Complete BSD-3-clause License: https://opensource.org/licenses/BSD-3-Clause
 
 #include "libcalculomatricial.h"
 
+// Las formulas teoricas pueden consultarse en el libro:
+//  Claraco, J. L. B., González, A., & Ocaña, J. M. G. M. (2012). Análisis estático de estructuras por el método matricial. Servicio de Publicaciones e Intercambio Científico de la Universidad de Málaga.
+// http://ingmec.ual.es/~jlblanco/papers/blanco2012calculo_matricial_estructuras.pdf
+
+
+// Matriz para barra articulada-articulada. Ver documentacion en el .h
+void calcmat::matriz_barra_art_art(
+	double L, double E, double A,
+	Eigen::Matrix2d & Kii,
+	Eigen::Matrix2d & Kjj,
+	Eigen::Matrix2d & Kij
+)
+{
+	// ...
+
+}
+
 
