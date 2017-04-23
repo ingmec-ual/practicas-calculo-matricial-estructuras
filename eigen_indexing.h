@@ -107,9 +107,21 @@ struct evaluator<Indexing<ArgType,RowIndexType,ColIndexType> >
 }
 }
 
+/** Indexing function for matrixes.
+*
+*/
 template <class ArgType,class RowIndexType, class ColIndexType>
 Indexing<ArgType,RowIndexType,ColIndexType> indexing(const Eigen::MatrixBase<ArgType>& arg, const RowIndexType& row_indices, const ColIndexType& col_indices)
 {
 	return Indexing<ArgType,RowIndexType,ColIndexType>(arg.derived(),row_indices,col_indices);
 }
 
+/** Indexing function for column vectors.
+*
+*/
+template <class ArgType, class RowIndexType>
+Indexing<ArgType, RowIndexType, std::array<int,1> > indexing(const Eigen::MatrixBase<ArgType>& arg, const RowIndexType& row_indices)
+{
+	const std::array<int, 1> idx_cols = { 0 };
+	return Indexing<ArgType, RowIndexType, std::array<int, 1> >(arg.derived(), row_indices, idx_cols);
+}
