@@ -18,14 +18,16 @@
   Complete BSD-3-clause License: https://opensource.org/licenses/BSD-3-Clause
 ******************************************************************************/
 
-#include <Eigen/Dense>
-#include <iostream>
+#include <Eigen/Dense>       // Libreria Eigen (matrices)
+#include "eigen_indexing.h"  // Funcion indexing(MAT, idxs_rows, idxs_cols)
+#include <iostream>          // Para std::cout
 
 int main()
 {
 	Eigen::Matrix3d M = Eigen::Matrix3d::Identity();
 	std::cout << "Matriz identidad I_3:" << std::endl << M << std::endl;
 
+	// Modificamos la matriz:
 	for (int i = 0; i < 3; i++) {
 		for (int j = 0; j < 3; j++) {
 			M(i, j) += i+j;

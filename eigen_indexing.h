@@ -52,7 +52,6 @@ public:
 	Indexing(const ArgType& arg,const RowIndexType &ri,const ColIndexType &ci)
 		: m_arg(arg),m_row_indices(ri),m_col_indices(ci)
 	{
-		//EIGEN_STATIC_ASSERT(ArgType::ColsAtCompileTime == 1,YOU_TRIED_CALLING_A_VECTOR_METHOD_ON_A_MATRIX);
 	}
 	typedef typename Eigen::internal::ref_selector<Indexing>::type Nested;
 	typedef Eigen::Index Index;
