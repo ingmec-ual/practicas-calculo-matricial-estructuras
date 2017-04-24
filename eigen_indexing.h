@@ -59,8 +59,8 @@ public:
 	Index cols() const { return std::tuple_size<ColIndexType>::value; }
 	typedef typename Eigen::internal::ref_selector<ArgType>::type ArgTypeNested;
 	ArgTypeNested m_arg;
-	const RowIndexType & m_row_indices;
-	const ColIndexType & m_col_indices;
+	const RowIndexType m_row_indices;
+	const ColIndexType m_col_indices;
 
 	template <class Derived>
 	Indexing<ArgType,RowIndexType,ColIndexType> operator =(const Eigen::EigenBase<Derived>& o)

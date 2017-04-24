@@ -33,8 +33,54 @@ void calcmat::matriz_barra_art_art(
 	Eigen::Matrix2d & Kij
 )
 {
-	// ...
-
+	// Submatrices en locales:
+	Kii <<
+		E*A / L, 0,
+		0, 0;
+	Kjj = Kii;
+	Kij <<
+		-E*A / L, 0,
+		0, 0;
 }
 
+// Matriz para barra rigida-rigida. Ver documentacion en el .h
+void calcmat::matriz_barra_rig_rig(double L, double E, double A, double Iz, Eigen::Matrix3d & Kii, Eigen::Matrix3d & Kjj, Eigen::Matrix3d & Kij)
+{
+	const double L2 = L*L, L3 = L2*L, EI = E*Iz, EA = E*A;
+	
+	// Submatrices en locales:
+	Kii <<
+		EA/L , 0        , 0        ,
+		0    , 12*EI/L3 , 6*EI/L2  ,
+		0    , 6*EI/L2  , 4*EI/L;
+	Kjj <<
+		EA/L , 0        , 0        ,
+		0    , 12*EI/L3 , -6*EI/L2  ,
+		0    , -6*EI/L2  , 4*EI/L;
+	Kij <<
+		-EA/L , 0        , 0        ,
+		0    , -12*EI/L3 , 6*EI/L2  ,
+		0    , -6*EI/L2  , 2*EI/L;
+}
+
+// Ver documentacion en el.h
+Eigen::Matrix2d calcmat::matriz_rotacion2(double ang)
+{
+	Eigen::Matrix2d R;
+	R <<
+		cos(ang), -sin(ang),
+		sin(ang), cos(ang);
+	return R;
+}
+
+// Ver documentacion en el.h
+Eigen::Matrix3d calcmat::matriz_rotacion3(double ang) 
+{
+	Eigen::Matrix3d R;
+	R <<
+		cos(ang), -sin(ang), 0,
+		sin(ang), cos(ang), 0,
+		0, 0, 1;
+	return R;
+}
 
