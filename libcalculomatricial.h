@@ -18,6 +18,8 @@ this software without specific prior written permission.
 Complete BSD-3-clause License: https://opensource.org/licenses/BSD-3-Clause
 ******************************************************************************/
 
+#pragma once
+
 #define _USE_MATH_DEFINES
 #include <cmath>  // M_PI, etc.
 
