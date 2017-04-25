@@ -18,6 +18,8 @@ this software without specific prior written permission.
 Complete BSD-3-clause License: https://opensource.org/licenses/BSD-3-Clause
 ******************************************************************************/
 
+#pragma once
+
 #include <Eigen/Core>
 #include <array>
 
