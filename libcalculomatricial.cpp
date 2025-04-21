@@ -22,7 +22,7 @@ Complete BSD-3-clause License: https://opensource.org/licenses/BSD-3-Clause
 
 // Las formulas teoricas pueden consultarse en el libro:
 //  Claraco, J. L. B., González, A., & Ocaña, J. M. G. M. (2012). Análisis estático de estructuras por el método matricial. Servicio de Publicaciones e Intercambio Científico de la Universidad de Málaga.
-// http://ingmec.ual.es/~jlblanco/papers/blanco2012calculo_matricial_estructuras.pdf
+// https://ingmec.ual.es/~jlblanco/papers/blanco2012calculo_matricial_estructuras.pdf
 
 
 // Matriz para barra articulada-articulada. Ver documentacion en el .h
